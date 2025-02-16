@@ -33,7 +33,7 @@
         }
 
         function fetchRating() {
-            var apiUrl = 'https://cub.red/api/reactions/get/' + card.id;
+            var apiUrl = 'https://cub.red/api/reactions/get/tv_' + card.id;
             log('Запрос к API: ' + apiUrl);
 
             network.clear();
