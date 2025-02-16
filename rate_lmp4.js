@@ -103,8 +103,15 @@
                 var rating = !isNaN(data.rating) && data.rating !== null ? parseFloat(data.rating).toFixed(1) : '0.0';
                 log('Отображение рейтинга: ' + rating);
                 var render = Lampa.Activity.active().activity.render();
-                $('.wait_rating', render).remove();
-                $('.rate--cub', render).removeClass('hide').find('> div').eq(0).text(rating);
+                log('Поиск элемента .rate--cub в DOM...');
+                var rateElement = $('.rate--cub', render);
+                if (rateElement.length) {
+                    log('Элемент .rate--cub найден. Отображаем рейтинг.');
+                    $('.wait_rating', render).remove();
+                    rateElement.removeClass('hide').find('> div').eq(0).text(rating);
+                } else {
+                    log('Ошибка: Элемент .rate--cub не найден в DOM.');
+                }
             } else {
                 log('Ошибка: Данные для отображения рейтинга отсутствуют.');
             }
@@ -123,10 +130,17 @@
             if (e.type == 'complite') {
                 log('Событие "complite" для карточки: ' + e.data.movie.id);
                 var render = e.object.activity.render();
-                if ($('.rate--cub', render).hasClass('hide') && !$('.wait_rating', render).length) {
-                    log('Добавление индикатора загрузки.');
-                    $('.info__rate', render).after('<div style="width:2em;margin-top:1em;margin-right:1em" class="wait_rating"><div class="broadcast__scan"><div></div></div><div>');
-                    rating_cub(e.data.movie);
+                log('Поиск элемента .rate--cub в DOM...');
+                var rateElement = $('.rate--cub', render);
+                if (rateElement.length) {
+                    log('Элемент .rate--cub найден. Проверяем, скрыт ли он.');
+                    if (rateElement.hasClass('hide') && !$('.wait_rating', render).length) {
+                        log('Добавление индикатора загрузки.');
+                        $('.info__rate', render).after('<div style="width:2em;margin-top:1em;margin-right:1em" class="wait_rating"><div class="broadcast__scan"><div></div></div><div>');
+                        rating_cub(e.data.movie);
+                    }
+                } else {
+                    log('Ошибка: Элемент .rate--cub не найден в DOM.');
                 }
             }
         });
